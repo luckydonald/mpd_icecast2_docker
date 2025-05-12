@@ -1,22 +1,38 @@
-version: '3.8'
+version: '2'
 
 services:
   icecast:
-    build: icecast
+    image: vitiman/alpine-icecast:latest
+    ports:
+      - "8000:8000"
     environment:
-      SERVICE_FQDN_STREAM_8000:
+        SERVICE_FQDN_STREAM_8000:
 
-      MPD_ICE_PASSWORD: ${MPD_ICE_PASSWORD}
-      ICE_ADMIN_PASSWORD: ${MPD_ADMIN_PASSWORD}
-    restart: unless-stopped
+  # Add your host volumen in path/to/... or add your own volume below
   mpd:
-    build: mpd
+    image: vitiman/alpine-mpd:latest
+
+    ports:
+      - "6600:6600"
+    depends_on:
+      - icecast
     environment:
-      # Using Coolify's magic environment variables
-      SERVICE_FQDN_STREAM_6600: /mpd
-      MPD_ADMIN_PASSWORD: ${MPD_ADMIN_PASSWORD}
-      MPD_ICE_PASSWORD: ${MPD_ICE_PASSWORD}
+        SERVICE_FQDN_STREAM_6600: /mpd
     volumes:
-      - ./music:/audio
-      - ./mpd-data:/var/mpd
-    restart: unless-stopped
+      - ./mpd_music:/var/lib/mpd/music
+      - ./mpd_playlists:/var/lib/mpd/playlists
+      - ./mpd_database:/var/lib/mpd/database
+
+  sima:
+    image: vitiman/alpine-sima:latest
+    depends_on:
+      - mpd
+
+  ympd:
+    image: vitiman/alpine-ympd:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mpd
+    environment:
+        SERVICE_FQDN_STREAM_8080: /ymdp
