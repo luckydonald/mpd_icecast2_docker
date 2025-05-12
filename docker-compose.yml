@@ -13,7 +13,7 @@ services:
     build: mpd
     environment:
       # Using Coolify's magic environment variables
-      SERVICE_FQDN_STREAM_6600: /admin
+      SERVICE_FQDN_STREAM_6600: /mpd
       MPD_ADMIN_PASSWORD: ${MPD_ADMIN_PASSWORD}
       MPD_ICE_PASSWORD: ${MPD_ICE_PASSWORD}
     volumes:
