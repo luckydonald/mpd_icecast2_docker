@@ -2,8 +2,8 @@ FROM ubuntu:latest
 MAINTAINER luckydonald
 
 # Install Icecast and necessary tools
-RUN apk update \
-    && apk add --no-cache icecast sudo bash gettext
+RUN apt-get update && \
+        apt-get install -y mpd sudo bash gettext
 
 # Copy the entry point script and set entry point
 COPY entrypoint.sh /entrypoint.sh
@@ -13,7 +13,8 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 USER mdp
 
-RUN mkdir -p /var/mpd/playlists \
+RUN set -x \
+&& mkdir -p /var/mpd/playlists \
 && touch /var/mpd/playlists/Favorites.m3u \
 && touch /var/mpd/mpdstate \
 && chown -R mpd /var/mpd/ \
@@ -22,5 +23,6 @@ RUN mkdir -p /var/mpd/playlists \
 # Expose the Icecast port & Copy the template file
 EXPOSE 6600
 VOLUME /audio /var/mpd
+
 COPY mdp.conf.template /etc/mpd.conf.template
 

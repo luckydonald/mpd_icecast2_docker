@@ -10,4 +10,4 @@ fi
 envsubst < /etc/icecast.xml.template > /etc/icecast.xml
 
 # Start the Icecast server (replace with the actual command to start Icecast)
-exec icecast -c /etc/icecast.xml
+exec /usr/bin/icecast -c /etc/icecast.xml
