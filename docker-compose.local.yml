@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  icecast:
+    ports:
+      - "8000:8000"
+  mpd:
+    ports:
+      - "6600:6600"

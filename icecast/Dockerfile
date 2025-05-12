@@ -11,8 +11,13 @@ RUN chmod +x /entrypoint.sh
 # Set the entry point
 ENTRYPOINT ["/entrypoint.sh"]
 
+USER icecast
+USER root
+
 RUN set -x \
-&& touch /etc/mime.types
+&& touch /etc/mime.types \
+&& touch /etc/icecast.xml \
+&& chown icecast /etc/icecast.xml
 
 # Switch to the icecast user
 USER icecast
@@ -20,4 +25,4 @@ USER icecast
 # Expose the Icecast port & Copy the template file
 EXPOSE 8000
 
-COPY icecast.xml.template /etc/icecast.xml.template
+COPY --chown=mpd icecast.xml.template /etc/icecast.xml.template

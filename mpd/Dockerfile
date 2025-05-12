@@ -11,18 +11,21 @@ RUN chmod +x /entrypoint.sh
 # Set the entry point
 ENTRYPOINT ["/entrypoint.sh"]
 
-USER mdp
-
+USER mpd
+USER root
 RUN set -x \
+&& touch /etc/mpd.conf \
+&& chown mpd /etc/mpd.conf \
+&& mkdir /var/mpd \
 && mkdir -p /var/mpd/playlists \
 && touch /var/mpd/playlists/Favorites.m3u \
 && touch /var/mpd/mpdstate \
-&& chown -R mpd /var/mpd/ \
-&& touch /etc/mpd.conf
+&& chown -R mpd /var/mpd/
 
 # Expose the Icecast port & Copy the template file
 EXPOSE 6600
 VOLUME /audio /var/mpd
+USER mpd
 
-COPY mdp.conf.template /etc/mpd.conf.template
+COPY --chown=mpd mdp.conf.template /etc/mpd.conf.template
 

@@ -9,5 +9,4 @@ fi
 # Replace environment variables in the template and output to icecast.xml
 envsubst < /etc/mpd.conf.template > /etc/mpd.conf
 
-# sudo chown -R mpd /var/mpd/
-exec icecast -c /etc/icecast.xml /usr/bin/mpd --no-daemon --stdout /etc/mpd.conf
+exec /usr/bin/mpd --no-daemon --stdout /etc/mpd.conf
